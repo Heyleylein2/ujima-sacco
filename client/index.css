@@ -1,6 +1,5 @@
-@import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+@import "tailwindcss";
 
 * {
   margin: 0;
@@ -26,12 +25,10 @@ body {
   font-family: 'Space Mono', monospace;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: var(--ujima-blue); border-radius: 3px; }
 
-/* Agent typing animation */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
