@@ -1,2 +1,3 @@
 node_modules/\n.env\ndist/\nbuild/
-.env
+.envclient/.env
+.env.exampleclient/.env

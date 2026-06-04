@@ -8,7 +8,7 @@ import BiasAudit from "./pages/BiasAudit";
 function App() {
   return (
     <Router>
-      <div className="min-h-screen" style={{ backgroundColor: "var(--ujima-light)" }}>
+      <div>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

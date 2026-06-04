@@ -1,127 +1,129 @@
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+import { Link } from "react-router-dom";
+import { FileText, LayoutDashboard, BarChart3, Zap, Users } from "lucide-react";
 
-const callGroq = async (messages, model = "llama-3.3-70b-versatile") => {
-  const response = await fetch(GROQ_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages,
-      max_tokens: 1024,
-      temperature: 0.7,
-    }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || "Groq API error");
-  }
-
-  const data = await response.json();
-  return data.choices[0].message.content;
-};
-
-export const runScoutAgent = async (memberData) => {
-  const messages = [
+const Home = () => {
+  const agents = [
     {
-      role: "system",
-      content: `You are Scout, a compassionate financial literacy coach for Ujima SACCO in Kenya.
-      Your role is to educate informal traders, market vendors, and farmers about loan eligibility.
-      Always respond warmly and encouragingly. Use simple language.
-      Structure your response with:
-      1. Greeting using their name
-      2. Financial Health Assessment (2-3 sentences)
-      3. Strengths (bullet points)
-      4. Areas to Improve (bullet points)
-      5. Readiness Score out of 100
-      6. Encouragement message
-      Keep response under 300 words.`,
+      name: "Scout Agent",
+      role: "Financial Literacy Coach",
+      description: "Educates members and assesses loan readiness before application.",
+      color: "var(--ujima-green)",
+      icon: "🎓",
     },
     {
-      role: "user",
-      content: `Member Profile:
-      Name: ${memberData.fullName}
-      Occupation: ${memberData.occupation}
-      Monthly Income: KES ${memberData.monthlyIncome}
-      Monthly Expenses: KES ${memberData.monthlyExpenses}
-      Savings (last 6 months): KES ${memberData.savings}
-      Dependants: ${memberData.dependants}
-      Loan Amount Requested: KES ${memberData.loanAmount}
-      Loan Purpose: ${memberData.loanPurpose}
-      Mobile Money Transactions/Month: ${memberData.mobileMoneyTx}
-      Previous Loan Default: ${memberData.previousDefault}`,
+      name: "Guardian Agent",
+      role: "Loan Risk Triage",
+      description: "Evaluates applications based on cash flow, not occupation labels.",
+      color: "var(--ujima-blue)",
+      icon: "🛡️",
+    },
+    {
+      name: "Hunter Agent",
+      role: "Human Coordination",
+      description: "Prepares officer briefings and flags cases needing human review.",
+      color: "var(--ujima-gold)",
+      icon: "🔗",
     },
   ];
-  return await callGroq(messages);
+
+  const stats = [
+    { label: "Vendor Rejection Rate (Before)", value: "68%", color: "var(--ujima-red)" },
+    { label: "Target Approval Increase", value: "+37%", color: "var(--ujima-green)" },
+    { label: "Max Default Risk", value: "<3%", color: "var(--ujima-gold)" },
+    { label: "Processing Time Reduction", value: "65%", color: "var(--ujima-blue)" },
+  ];
+
+  const frameworks = [
+    { name: "ETHOS", desc: "Dignity-Centred Loan Approval" },
+    { name: "TRACK", desc: "Bias Audit Framework" },
+    { name: "OASIS", desc: "Data Stewardship Charter" },
+    { name: "PRIDE", desc: "Human Oversight Framework" },
+    { name: "HORIZON", desc: "Future Scaling Roadmap" },
+  ];
+
+  return (
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 16px" }}>
+
+      {/* Hero */}
+      <div style={{ backgroundColor: "var(--ujima-blue)", borderRadius: "16px", padding: "60px 40px", marginBottom: "40px", color: "white", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "var(--ujima-gold)", color: "var(--ujima-blue)", padding: "4px 12px", borderRadius: "999px", fontSize: "12px", fontWeight: "700", marginBottom: "16px" }}>
+            <Zap size={12} /> AI-POWERED LENDING ECOSYSTEM
+          </div>
+          <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", fontWeight: "800", lineHeight: 1.2, marginBottom: "16px" }}>
+            Fair Lending for Every<br />
+            <span style={{ color: "var(--ujima-gold)" }}>Kenyan Entrepreneur</span>
+          </h1>
+          <p style={{ color: "#93C5FD", fontSize: "18px", maxWidth: "600px", marginBottom: "32px" }}>
+            Ujima SACCO's AI system gives market vendors, farmers, and informal traders
+            equal access to credit — evaluated on cash flow, not occupation labels.
+          </p>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <Link to="/apply" style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "var(--ujima-gold)", color: "var(--ujima-blue)", padding: "12px 24px", borderRadius: "12px", fontWeight: "700", fontSize: "14px", textDecoration: "none" }}>
+              <FileText size={16} /> Apply for a Loan
+            </Link>
+            <Link to="/officer" style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,255,255,0.1)", color: "white", padding: "12px 24px", borderRadius: "12px", fontWeight: "700", fontSize: "14px", textDecoration: "none" }}>
+              <LayoutDashboard size={16} /> Officer Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "40px" }}>
+        {stats.map((stat) => (
+          <div key={stat.label} style={{ backgroundColor: "white", borderRadius: "12px", padding: "20px", textAlign: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
+            <p style={{ fontSize: "32px", fontWeight: "800", color: stat.color, marginBottom: "4px" }}>{stat.value}</p>
+            <p style={{ fontSize: "12px", color: "#6B7280", fontWeight: "500" }}>{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Agents */}
+      <h2 style={{ fontSize: "24px", fontWeight: "800", color: "var(--ujima-blue)", marginBottom: "20px" }}>
+        Three-Agent AI System
+      </h2>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", marginBottom: "40px" }}>
+        {agents.map((agent) => (
+          <div key={agent.name} style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", borderTop: `4px solid ${agent.color}` }}>
+            <div style={{ fontSize: "40px", marginBottom: "12px" }}>{agent.icon}</div>
+            <h3 style={{ fontWeight: "700", fontSize: "18px", color: "var(--ujima-blue)", marginBottom: "4px" }}>{agent.name}</h3>
+            <p style={{ fontSize: "12px", fontWeight: "600", color: agent.color, marginBottom: "8px" }}>{agent.role}</p>
+            <p style={{ fontSize: "14px", color: "#6B7280" }}>{agent.description}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Frameworks */}
+      <h2 style={{ fontSize: "24px", fontWeight: "800", color: "var(--ujima-blue)", marginBottom: "20px" }}>
+        Ethical Architecture
+      </h2>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
+        {frameworks.map((fw) => (
+          <div key={fw.name} style={{ backgroundColor: "white", borderRadius: "12px", padding: "16px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", display: "flex", alignItems: "center", gap: "12px" }}>
+            <span style={{ fontWeight: "800", fontSize: "18px", color: "var(--ujima-blue)", fontFamily: "monospace" }}>{fw.name}</span>
+            <span style={{ fontSize: "14px", color: "#6B7280" }}>{fw.desc}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div style={{ backgroundColor: "var(--ujima-green)", borderRadius: "12px", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
+        <div style={{ color: "white" }}>
+          <p style={{ fontWeight: "700", fontSize: "18px" }}>Ready to review applications?</p>
+          <p style={{ color: "#A7F3D0", fontSize: "14px" }}>Access the bias audit dashboard and officer tools</p>
+        </div>
+        <div style={{ display: "flex", gap: "12px" }}>
+          <Link to="/audit" style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "white", color: "var(--ujima-green)", padding: "10px 20px", borderRadius: "8px", fontWeight: "600", fontSize: "14px", textDecoration: "none" }}>
+            <BarChart3 size={15} /> Bias Audit
+          </Link>
+          <Link to="/officer" style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,255,255,0.2)", color: "white", padding: "10px 20px", borderRadius: "8px", fontWeight: "600", fontSize: "14px", textDecoration: "none" }}>
+            <Users size={15} /> Officer View
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export const runGuardianAgent = async (memberData) => {
-  const messages = [
-    {
-      role: "system",
-      content: `You are Guardian, an ethical AI loan risk assessment agent for Ujima SACCO in Kenya.
-      Evaluate loan applications from informal traders, market vendors, and farmers.
-      Assess based on cash flow and repayment capacity — NOT occupation labels.
-      Actively work against bias toward informal sector workers.
-      Structure your response as:
-      1. RISK LEVEL: (LOW / MEDIUM / HIGH)
-      2. RECOMMENDATION: (APPROVE / CONDITIONAL APPROVE / ESCALATE TO OFFICER / DECLINE)
-      3. Risk Score: X/100 (lower = less risk)
-      4. Key Factors (3-4 bullet points)
-      5. Repayment Capacity Analysis
-      6. Suggested Loan Terms (if approving)
-      7. Conditions (if any)
-      Keep response under 350 words.`,
-    },
-    {
-      role: "user",
-      content: `Loan Application:
-      Applicant: ${memberData.fullName}
-      Occupation: ${memberData.occupation}
-      Monthly Income: KES ${memberData.monthlyIncome}
-      Monthly Expenses: KES ${memberData.monthlyExpenses}
-      Net Monthly Surplus: KES ${memberData.monthlyIncome - memberData.monthlyExpenses}
-      Savings: KES ${memberData.savings}
-      Dependants: ${memberData.dependants}
-      Requested Amount: KES ${memberData.loanAmount}
-      Loan Purpose: ${memberData.loanPurpose}
-      Repayment Period: ${memberData.repaymentPeriod} months
-      Mobile Money Transactions/Month: ${memberData.mobileMoneyTx}
-      Previous Default: ${memberData.previousDefault}
-      Gender: ${memberData.gender}`,
-    },
-  ];
-  return await callGroq(messages);
-};
-
-export const runHunterAgent = async (memberData, guardianResult) => {
-  const messages = [
-    {
-      role: "system",
-      content: `You are Hunter, the human coordination agent for Ujima SACCO.
-      Prepare a clear briefing for the loan officer who makes the final decision.
-      Structure your response as:
-      1. OFFICER BRIEFING SUMMARY (2-3 sentences)
-      2. AI RECOMMENDATION SUMMARY
-      3. FLAGS FOR HUMAN REVIEW
-      4. SUGGESTED NEXT STEPS (numbered list)
-      5. DOCUMENTS TO REQUEST FROM MEMBER
-      6. PRIORITY LEVEL: (URGENT / NORMAL / LOW)
-      Keep response under 300 words.`,
-    },
-    {
-      role: "user",
-      content: `Member: ${memberData.fullName}
-      Occupation: ${memberData.occupation}
-      Loan Amount: KES ${memberData.loanAmount}
-      Purpose: ${memberData.loanPurpose}
-      Dependants: ${memberData.dependants}
-      Guardian Assessment: ${guardianResult}`,
-    },
-  ];
-  return await callGroq(messages, "llama-3.1-8b-instant");
-};
+export default Home;

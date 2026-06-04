@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LayoutDashboard, CheckCircle, XCircle, Clock, Eye, User, Calendar, DollarSign, AlertTriangle } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, User, DollarSign, AlertTriangle, Calendar } from "lucide-react";
 
 const OfficerDashboard = () => {
   const [applications, setApplications] = useState([]);
@@ -51,266 +51,165 @@ const OfficerDashboard = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 16px" }}>
 
       {/* Header */}
-      <div className="mb-8">
-        <div
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3"
-          style={{ backgroundColor: "var(--ujima-blue)", color: "white" }}
-        >
-          <LayoutDashboard size={12} /> OFFICER DASHBOARD
+      <div style={{ marginBottom: "32px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "var(--ujima-blue)", color: "white", padding: "4px 12px", borderRadius: "999px", fontSize: "12px", fontWeight: "700", marginBottom: "12px" }}>
+          Officer Dashboard
         </div>
-        <h1 className="text-3xl font-extrabold" style={{ color: "var(--ujima-blue)" }}>
-          Loan Officer Review Panel
-        </h1>
-        <p className="text-gray-500 mt-1">
-          Final lending decisions rest with you. AI agents provide recommendations only.
-        </p>
+        <h1 style={{ fontSize: "32px", fontWeight: "800", color: "var(--ujima-blue)" }}>Loan Officer Review Panel</h1>
+        <p style={{ color: "#6B7280", marginTop: "4px" }}>Final lending decisions rest with you. AI agents provide recommendations only.</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "32px" }}>
         {[
-          { label: "Total Applications", value: stats.total, color: "var(--ujima-blue)", icon: <LayoutDashboard size={18} /> },
-          { label: "Pending Review", value: stats.pending, color: "var(--ujima-gold)", icon: <Clock size={18} /> },
-          { label: "Approved", value: stats.approved, color: "var(--ujima-green)", icon: <CheckCircle size={18} /> },
-          { label: "Declined", value: stats.declined, color: "var(--ujima-red)", icon: <XCircle size={18} /> },
+          { label: "Total Applications", value: stats.total, color: "var(--ujima-blue)" },
+          { label: "Pending Review", value: stats.pending, color: "var(--ujima-gold)" },
+          { label: "Approved", value: stats.approved, color: "var(--ujima-green)" },
+          { label: "Declined", value: stats.declined, color: "var(--ujima-red)" },
         ].map((s) => (
-          <div key={s.label} className="bg-white rounded-xl p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-gray-500 font-medium">{s.label}</p>
-              <span style={{ color: s.color }}>{s.icon}</span>
-            </div>
-            <p className="text-3xl font-extrabold" style={{ color: s.color }}>
-              {s.value}
-            </p>
+          <div key={s.label} style={{ backgroundColor: "white", borderRadius: "12px", padding: "20px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
+            <p style={{ fontSize: "12px", color: "#6B7280", fontWeight: "500", marginBottom: "8px" }}>{s.label}</p>
+            <p style={{ fontSize: "32px", fontWeight: "800", color: s.color }}>{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid md:grid-cols-5 gap-6">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "24px" }}>
 
-        {/* Application List */}
-        <div className="md:col-span-2">
-          {/* Filter Tabs */}
-          <div className="flex gap-1 mb-4 bg-white rounded-xl p-1 shadow-sm">
+        {/* List */}
+        <div>
+          <div style={{ display: "flex", gap: "4px", backgroundColor: "white", borderRadius: "12px", padding: "4px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", marginBottom: "16px" }}>
             {["all", "pending", "approved", "declined"].map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className="flex-1 py-2 rounded-lg text-xs font-bold capitalize transition-all"
-                style={
-                  filter === f
-                    ? { backgroundColor: "var(--ujima-blue)", color: "white" }
-                    : { color: "#94A3B8" }
-                }
-              >
+              <button key={f} onClick={() => setFilter(f)} style={{ flex: 1, padding: "8px", borderRadius: "8px", fontSize: "11px", fontWeight: "700", textTransform: "capitalize", border: "none", cursor: "pointer", fontFamily: "inherit", backgroundColor: filter === f ? "var(--ujima-blue)" : "transparent", color: filter === f ? "white" : "#94A3B8" }}>
                 {f}
               </button>
             ))}
           </div>
 
-          {/* Applications */}
-          <div className="space-y-3">
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {filtered.length === 0 ? (
-              <div className="bg-white rounded-xl p-8 text-center shadow-sm">
-                <p className="text-gray-400 text-sm">No applications found</p>
-                <p className="text-gray-300 text-xs mt-1">
-                  Submit a loan application first
-                </p>
+              <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "32px", textAlign: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
+                <p style={{ color: "#9CA3AF", fontSize: "14px" }}>No applications found</p>
+                <p style={{ color: "#D1D5DB", fontSize: "12px", marginTop: "4px" }}>Submit a loan application first</p>
               </div>
             ) : (
               filtered.map((app) => (
-                <div
-                  key={app.id}
-                  onClick={() => setSelected(app)}
-                  className={`bg-white rounded-xl p-4 shadow-sm cursor-pointer transition-all hover:shadow-md border-2 ${
-                    selected?.id === app.id ? "border-blue-400" : "border-transparent"
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
+                <div key={app.id} onClick={() => setSelected(app)} style={{ backgroundColor: "white", borderRadius: "12px", padding: "16px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", cursor: "pointer", border: `2px solid ${selected?.id === app.id ? "var(--ujima-blue)" : "transparent"}`, transition: "all 0.2s" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                     <div>
-                      <p className="font-bold text-sm" style={{ color: "var(--ujima-blue)" }}>
-                        {app.member.fullName}
-                      </p>
-                      <p className="text-xs text-gray-500">{app.member.occupation}</p>
+                      <p style={{ fontWeight: "700", fontSize: "14px", color: "var(--ujima-blue)" }}>{app.member.fullName}</p>
+                      <p style={{ fontSize: "12px", color: "#6B7280" }}>{app.member.occupation}</p>
                     </div>
-                    <span
-                      className="text-xs font-bold px-2 py-1 rounded-full"
-                      style={{
-                        backgroundColor: app.officerDecision === "Approved"
-                          ? "#DCFCE7" : app.officerDecision === "Declined"
-                          ? "#FEE2E2" : "#FEF9C3",
-                        color: app.officerDecision === "Approved"
-                          ? "var(--ujima-green)" : app.officerDecision === "Declined"
-                          ? "var(--ujima-red)" : "#92400E",
-                      }}
-                    >
+                    <span style={{ fontSize: "11px", fontWeight: "700", padding: "4px 8px", borderRadius: "999px", backgroundColor: app.officerDecision === "Approved" ? "#DCFCE7" : app.officerDecision === "Declined" ? "#FEE2E2" : "#FEF9C3", color: app.officerDecision === "Approved" ? "var(--ujima-green)" : app.officerDecision === "Declined" ? "var(--ujima-red)" : "#92400E" }}>
                       {app.officerDecision || "PENDING"}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs font-semibold" style={{ color: "var(--ujima-gold)" }}>
-                      KES {Number(app.member.loanAmount).toLocaleString()}
-                    </p>
-                    <span
-                      className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
-                      style={{ backgroundColor: getRiskColor(app.results?.guardian) }}
-                    >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <p style={{ fontSize: "12px", fontWeight: "600", color: "var(--ujima-gold)" }}>KES {Number(app.member.loanAmount).toLocaleString()}</p>
+                    <span style={{ fontSize: "11px", fontWeight: "700", padding: "2px 8px", borderRadius: "999px", backgroundColor: getRiskColor(app.results?.guardian), color: "white" }}>
                       {getRiskLabel(app.results?.guardian)}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {new Date(app.submittedAt).toLocaleDateString("en-KE")}
-                  </p>
+                  <p style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>{new Date(app.submittedAt).toLocaleDateString("en-KE")}</p>
                 </div>
               ))
             )}
           </div>
         </div>
 
-        {/* Detail Panel */}
-        <div className="md:col-span-3">
+        {/* Detail */}
+        <div>
           {!selected ? (
-            <div className="bg-white rounded-2xl shadow-sm p-12 text-center h-full flex flex-col items-center justify-center">
-              <Eye size={48} className="text-gray-200 mb-4" />
-              <p className="text-gray-400 font-semibold">Select an application to review</p>
-              <p className="text-gray-300 text-sm mt-1">Click any application on the left</p>
+            <div style={{ backgroundColor: "white", borderRadius: "16px", padding: "60px", textAlign: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "400px" }}>
+              <Eye size={48} style={{ color: "#E2E8F0", marginBottom: "16px" }} />
+              <p style={{ color: "#9CA3AF", fontWeight: "600" }}>Select an application to review</p>
+              <p style={{ color: "#D1D5DB", fontSize: "14px", marginTop: "4px" }}>Click any application on the left</p>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div style={{ backgroundColor: "white", borderRadius: "16px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", overflow: "hidden" }}>
 
-              {/* Member Header */}
-              <div className="p-6" style={{ backgroundColor: "var(--ujima-blue)" }}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold"
-                      style={{ backgroundColor: "var(--ujima-gold)", color: "var(--ujima-blue)" }}
-                    >
+              {/* Member header */}
+              <div style={{ padding: "24px", backgroundColor: "var(--ujima-blue)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--ujima-gold)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "700", color: "var(--ujima-blue)" }}>
                       {selected.member.fullName.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-white font-bold text-lg">{selected.member.fullName}</p>
-                      <p className="text-blue-200 text-sm">{selected.member.occupation}</p>
+                      <p style={{ color: "white", fontWeight: "700", fontSize: "18px" }}>{selected.member.fullName}</p>
+                      <p style={{ color: "#93C5FD", fontSize: "14px" }}>{selected.member.occupation}</p>
                     </div>
                   </div>
-                  <span
-                    className="text-sm font-bold px-3 py-1.5 rounded-full"
-                    style={{
-                      backgroundColor: selected.officerDecision === "Approved"
-                        ? "var(--ujima-green)" : selected.officerDecision === "Declined"
-                        ? "var(--ujima-red)" : "var(--ujima-gold)",
-                      color: "white",
-                    }}
-                  >
+                  <span style={{ fontSize: "13px", fontWeight: "700", padding: "6px 12px", borderRadius: "999px", backgroundColor: selected.officerDecision === "Approved" ? "var(--ujima-green)" : selected.officerDecision === "Declined" ? "var(--ujima-red)" : "var(--ujima-gold)", color: "white" }}>
                     {selected.officerDecision || "PENDING REVIEW"}
                   </span>
                 </div>
               </div>
 
-              <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+              <div style={{ padding: "24px", maxHeight: "70vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "20px" }}>
 
-                {/* Member Details */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {/* Details grid */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
                   {[
-                    { label: "Loan Amount", value: `KES ${Number(selected.member.loanAmount).toLocaleString()}`, icon: <DollarSign size={14} /> },
-                    { label: "Purpose", value: selected.member.loanPurpose, icon: <AlertTriangle size={14} /> },
-                    { label: "Repayment", value: `${selected.member.repaymentPeriod} months`, icon: <Calendar size={14} /> },
-                    { label: "Monthly Income", value: `KES ${Number(selected.member.monthlyIncome).toLocaleString()}`, icon: <DollarSign size={14} /> },
-                    { label: "Net Surplus", value: `KES ${(selected.member.monthlyIncome - selected.member.monthlyExpenses).toLocaleString()}`, icon: <DollarSign size={14} /> },
-                    { label: "Dependants", value: selected.member.dependants, icon: <User size={14} /> },
+                    { label: "Loan Amount", value: `KES ${Number(selected.member.loanAmount).toLocaleString()}` },
+                    { label: "Purpose", value: selected.member.loanPurpose },
+                    { label: "Repayment", value: `${selected.member.repaymentPeriod} months` },
+                    { label: "Monthly Income", value: `KES ${Number(selected.member.monthlyIncome).toLocaleString()}` },
+                    { label: "Net Surplus", value: `KES ${(Number(selected.member.monthlyIncome) - Number(selected.member.monthlyExpenses)).toLocaleString()}` },
+                    { label: "Dependants", value: selected.member.dependants },
                   ].map((item) => (
-                    <div key={item.label} className="p-3 rounded-lg" style={{ backgroundColor: "var(--ujima-light)" }}>
-                      <div className="flex items-center gap-1 mb-1" style={{ color: "var(--ujima-blue)" }}>
-                        {item.icon}
-                        <p className="text-xs text-gray-500">{item.label}</p>
-                      </div>
-                      <p className="font-bold text-sm" style={{ color: "var(--ujima-blue)" }}>
-                        {item.value}
-                      </p>
+                    <div key={item.label} style={{ padding: "12px", borderRadius: "8px", backgroundColor: "var(--ujima-light)" }}>
+                      <p style={{ fontSize: "11px", color: "#6B7280" }}>{item.label}</p>
+                      <p style={{ fontWeight: "700", fontSize: "13px", color: "var(--ujima-blue)", marginTop: "2px" }}>{item.value}</p>
                     </div>
                   ))}
                 </div>
 
-                {/* Agent Results */}
+                {/* Agent results */}
                 {[
                   { key: "scout", label: "🎓 Scout Agent", color: "var(--ujima-green)" },
                   { key: "guardian", label: "🛡️ Guardian Agent", color: "var(--ujima-blue)" },
                   { key: "hunter", label: "🔗 Hunter Agent", color: "var(--ujima-gold)" },
                 ].map((agent) => (
                   <div key={agent.key}>
-                    <p className="text-sm font-bold mb-2" style={{ color: agent.color }}>
-                      {agent.label}
-                    </p>
-                    <div
-                      className="p-4 rounded-xl text-xs text-gray-700 leading-relaxed whitespace-pre-wrap font-sans"
-                      style={{ backgroundColor: "var(--ujima-light)", borderLeft: `3px solid ${agent.color}` }}
-                    >
+                    <p style={{ fontSize: "13px", fontWeight: "700", color: agent.color, marginBottom: "8px" }}>{agent.label}</p>
+                    <div style={{ padding: "16px", borderRadius: "8px", backgroundColor: "var(--ujima-light)", borderLeft: `3px solid ${agent.color}`, fontSize: "12px", color: "#374151", whiteSpace: "pre-wrap", fontFamily: "inherit", lineHeight: "1.6" }}>
                       {selected.results?.[agent.key] || "No data"}
                     </div>
                   </div>
                 ))}
 
-                {/* Officer Decision */}
+                {/* Decision */}
                 {!selected.officerDecision ? (
-                  <div
-                    className="p-5 rounded-xl border-2"
-                    style={{ borderColor: "var(--ujima-gold)", backgroundColor: "#FFFBEB" }}
-                  >
-                    <p className="font-bold mb-1" style={{ color: "var(--ujima-blue)" }}>
-                      Your Decision (PRIDE Framework)
-                    </p>
-                    <p className="text-xs text-gray-500 mb-3">
-                      AI agents have completed their assessment. Final decision is yours.
-                    </p>
+                  <div style={{ padding: "20px", borderRadius: "12px", border: "2px solid var(--ujima-gold)", backgroundColor: "#FFFBEB" }}>
+                    <p style={{ fontWeight: "700", color: "var(--ujima-blue)", marginBottom: "4px" }}>Your Decision (PRIDE Framework)</p>
+                    <p style={{ fontSize: "12px", color: "#6B7280", marginBottom: "12px" }}>AI agents have completed their assessment. Final decision is yours.</p>
                     <textarea
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
                       placeholder="Add your officer notes here..."
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-blue-400"
+                      style={{ width: "100%", border: "1px solid #E2E8F0", borderRadius: "8px", padding: "10px", fontSize: "13px", marginBottom: "12px", fontFamily: "inherit", resize: "vertical" }}
                       rows={3}
                     />
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => updateDecision(selected.id, "Approved")}
-                        className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-sm text-white transition-all hover:opacity-90"
-                        style={{ backgroundColor: "var(--ujima-green)" }}
-                      >
+                    <div style={{ display: "flex", gap: "12px" }}>
+                      <button onClick={() => updateDecision(selected.id, "Approved")} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "10px", borderRadius: "8px", fontWeight: "700", fontSize: "14px", backgroundColor: "var(--ujima-green)", color: "white", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
                         <CheckCircle size={16} /> Approve Loan
                       </button>
-                      <button
-                        onClick={() => updateDecision(selected.id, "Declined")}
-                        className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-sm text-white transition-all hover:opacity-90"
-                        style={{ backgroundColor: "var(--ujima-red)" }}
-                      >
+                      <button onClick={() => updateDecision(selected.id, "Declined")} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "10px", borderRadius: "8px", fontWeight: "700", fontSize: "14px", backgroundColor: "var(--ujima-red)", color: "white", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
                         <XCircle size={16} /> Decline Loan
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div
-                    className="p-4 rounded-xl"
-                    style={{
-                      backgroundColor: selected.officerDecision === "Approved" ? "#DCFCE7" : "#FEE2E2",
-                    }}
-                  >
-                    <p
-                      className="font-bold"
-                      style={{
-                        color: selected.officerDecision === "Approved"
-                          ? "var(--ujima-green)" : "var(--ujima-red)",
-                      }}
-                    >
+                  <div style={{ padding: "16px", borderRadius: "12px", backgroundColor: selected.officerDecision === "Approved" ? "#DCFCE7" : "#FEE2E2" }}>
+                    <p style={{ fontWeight: "700", color: selected.officerDecision === "Approved" ? "var(--ujima-green)" : "var(--ujima-red)" }}>
                       {selected.officerDecision === "Approved" ? "✅ Loan Approved" : "❌ Loan Declined"}
                     </p>
-                    {selected.officerNote && (
-                      <p className="text-sm text-gray-600 mt-1">{selected.officerNote}</p>
-                    )}
-                    <p className="text-xs text-gray-400 mt-1">
-                      {selected.decidedAt && new Date(selected.decidedAt).toLocaleString("en-KE")}
-                    </p>
+                    {selected.officerNote && <p style={{ fontSize: "13px", color: "#6B7280", marginTop: "4px" }}>{selected.officerNote}</p>}
+                    {selected.decidedAt && <p style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>{new Date(selected.decidedAt).toLocaleString("en-KE")}</p>}
                   </div>
                 )}
               </div>
